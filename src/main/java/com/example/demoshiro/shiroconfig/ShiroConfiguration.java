@@ -4,12 +4,16 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.apache.shiro.mgt.SecurityManager;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 
 /**
  * @author HQ
@@ -19,9 +23,14 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfiguration {
+
+    private final Logger logger=LoggerFactory.getLogger(this.getClass());
+
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager){
-        System.out.println("ShiroConfiguration.shiroFilter()");
+        //添加日志，启动时间
+        logger.info("启动shiroFilter--时间是：" + new Date());
+        //System.out.println("ShiroConfiguration.shiroFilter()");
         ShiroFilterFactoryBean shiroFilterFactoryBean=new ShiroFilterFactoryBean();
 
         //必须设置SecurityManager
@@ -35,7 +44,9 @@ public class ShiroConfiguration {
 
         //<!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边-->:这是一个坑呢，一不小心代码就不好使了;
         //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
+        filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/**","authc");
+
 
         //如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/login");
@@ -75,8 +86,9 @@ public class ShiroConfiguration {
         return myShiroRealm;
     }
     @Bean
-    public SecurityManager securityManager(){
+    public SecurityManager securityManager(MyShiroRealm myShiroRealm){
         DefaultWebSecurityManager securityManager=new DefaultWebSecurityManager();
+        securityManager.setRealm(myShiroRealm);
         return securityManager;
     }
 

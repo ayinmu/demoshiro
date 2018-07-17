@@ -2,12 +2,18 @@ package com.example.demoshiro.controller;
 
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.Map;
+
 
 /**
  * @author HQ
@@ -16,10 +22,13 @@ import java.util.Map;
  */
 @Controller
 public class HomeController {
-    @RequestMapping({"/","/index"})
-    public String index(){
+    //日志
+    private final Logger logger=LoggerFactory.getLogger(this.getClass());
+
+    //@RequestMapping({"/","/index"})
+    /*public String index(){
         return "index";
-    }
+    }*/
     /*@RequestMapping(value = "/login",method = RequestMethod.GET)
     public String login(){
         return "login";
@@ -27,6 +36,8 @@ public class HomeController {
 
     @RequestMapping("/login")
     public String login(HttpServletRequest request, Map<String, Object> map) throws Exception{
+        //日志
+        logger.info("Login启动时间："+ new Date());
         System.out.println("HomeController.login()");
         // 登录失败从request中获取shiro处理的异常信息。
         // shiroLoginFailure:就是shiro异常类的全类名.
@@ -52,7 +63,6 @@ public class HomeController {
         // 此方法不处理登录成功,由shiro进行处理
         return "/login";
     }
-
     @RequestMapping("/403")
     public String unauthorizedRole(){
         System.out.println("------没有权限-------");
