@@ -5,9 +5,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -34,7 +32,7 @@ public class HomeController {
         return "login";
     }*/
 
-    @RequestMapping("/login")
+   @RequestMapping("/login")
     public String login(HttpServletRequest request, Map<String, Object> map) throws Exception{
         //日志
         logger.info("Login启动时间："+ new Date());
